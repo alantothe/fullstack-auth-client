@@ -1,25 +1,49 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
 
-function App() {
+import { createBrowserRouter, RouterProvider} from 'react-router-dom';
+import { useState } from 'react';
+
+import GlobalLayout from './layouts/GlobalLayout';
+import HomePage from './pages/HomePage';
+import LoginPage from './pages/LoginPage';
+import RegistrationPage from './pages/RegistrationPage';
+
+
+const urlEndPoint = process.env.REACT_APP_URL_ENDPOINT;
+
+const App = () => {
+  const [shouldRefetch, setShouldRefetch] = useState(false);
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <GlobalLayout />,
+      children: [
+        {
+          element: (
+            <HomePage urlEndPoint={urlEndPoint} shouldRefetch={shouldRefetch} />
+          ),
+          index: true,
+        },
+        {
+          path: '/login',
+          element: <LoginPage />,
+        },
+        {
+          path: '/registration',
+          element: <RegistrationPage />,
+        }
+      ]
+    }
+
+
+  ])
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App-header">
+      <RouterProvider router={router}/>
     </div>
-  );
+  )
 }
 
 export default App;
